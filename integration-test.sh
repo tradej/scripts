@@ -6,11 +6,14 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
-rpmfile="$2"
+custom_rpm="$2"
 name="$1"
 tmpdir="/tmp/integration/$name"
+logfile="$tmpdir/result.txt"
 
-rm -rf $tmpdir # TODO More sensitive approach desirable
+echo "Integration test for $name" 1>&2
+
+rm -rf $tmpdir 2> /dev/null # TODO More sensitive approach desirable
 mkdir -p $tmpdir
 if [ $? -ne 0 ]; then exit; fi
 
@@ -23,10 +26,41 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-repoquery --whatrequires $name --enablerepo rawhide-source --archlist src 2> dependent.txt
+repoquery --whatrequires $name --enablerepo rawhide-source --archlist src 2> /dev/null | sed -e 's/-\([0-9]:\)\?[0-9.\-]*.fc..\.src//' > dependent.txt
+echo 'Initializing Mock' 1>&2
+mock -r fedora-rawhide-x86_64 init &> /dev/null &&
+echo 'Installing package' 1>&2 &&
+mock -r fedora-rawhide-x86_64 install $custom_rpm &> /dev/null
 
+if [ $? -ne 0 ]; then 
+    echo 'Mock error!' 1>&2
+    popd &> /dev/null
+    exit 1
+fi
+
+
+echo 'Building packages' 1>&2
+# Build each package
 for i in `cat dependent.txt`; do
-    echo $i
+    echo -n "$i " | tee -a $logfile
+    fedpkg clone $i &> /dev/null
+    cd $i
+    fedpkg sources &> /dev/null
+
+    # Building
+    srpm=`fedpkg srpm | sed -e 's/Wrote: //'`
+    mock -r fedora-rawhide-x86_64 rebuild $srpm --no-clean &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo failed | tee -a $logfile
+    else
+        echo passed | tee -a $logfile
+    fi
+    
+    # Copying results
+    mkdir result
+    cp /var/lib/mock/fedora-rawhide-x86_64/result/*.log -t ./result
+
+    cd $tmpdir
 done
 
 popd &> /dev/null
