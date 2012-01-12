@@ -40,6 +40,7 @@ fi
 
 
 echo 'Building packages' 1>&2
+echo '--------------------'
 # Build each package
 for i in `cat dependent.txt`; do
     echo -n "$i " | tee -a $logfile
@@ -52,6 +53,7 @@ for i in `cat dependent.txt`; do
     mock -r fedora-rawhide-x86_64 rebuild $srpm --no-clean &> /dev/null
     if [ $? -ne 0 ]; then
         echo failed | tee -a $logfile
+        echo $i > $tmpdir/failed.tmp
     else
         echo passed | tee -a $logfile
     fi
@@ -62,5 +64,42 @@ for i in `cat dependent.txt`; do
 
     cd $tmpdir
 done
+
+echo '--------------------'
+
+cd $tmpdir
+
+# In case there were failed builds
+file $tmpdir/failed.tmp &> /dev/null
+if [ $? -eq 0 ]; then
+    broken_logfile='broken.log'
+    echo 'Packages have failed to build!'
+    echo 'Initializing Mock'
+    mock -r fedora-rawhide-x86_64 init
+    echo 'Rebuilding failed packages'
+    echo '--------------------'
+
+    for i in `cat failed.tmp`; do
+        echo -n "$i " | tee -a $logfile
+
+	    # Building
+	    srpm=`fedpkg srpm | sed -e 's/Wrote: //'`
+	    mock -r fedora-rawhide-x86_64 rebuild $srpm --no-clean &> /dev/null
+	    if [ $? -ne 0 ]; then
+	        echo failed | tee -a $logfile
+	    else
+	        echo passed | tee -a $logfile
+            echo $i >> $broken_logfile
+	    fi
+	    
+	    # Copying results
+	    mkdir result-rebuild -p &> /dev/null
+	    cp /var/lib/mock/fedora-rawhide-x86_64/result/*.log -t ./result-rebuild
+	
+	    cd $tmpdir
+    done
+fi
+
+echo '--------------------'
 
 popd &> /dev/null
