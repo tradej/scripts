@@ -2,6 +2,12 @@ let g:Powerline_symbols = 'fancy'
 
 nmap ,cl /%changelog<LF>:r!date +'\%a \%b \%d \%Y'' Tomas Radej <tradej@redhat.com> - ' <LF>0i* <ESC>$
 
+" Commenting and uncommenting
+nmap ,cc :s/^/#/<CR>:nohl<CR>
+nmap ,cu :s/^#//<CR>
+vmap ,cc :s/^/#/<CR>:nohl<CR>
+vmap ,cu :s/^#//<CR>
+
 imap ;; <Esc>
 
 let mapleader = ","
