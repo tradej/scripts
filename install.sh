@@ -1,9 +1,9 @@
 #! /bin/bash
 
 # vimrc
-cp ~/.vimrc ~/.vimrc.bak
+mv ~/.vimrc ~/.vimrc.bak
 ln -s $PWD/vimrc ~/.vimrc
 
 # bashrc
-cp ~/.bashrc ~/.bashrc.bak
+mv ~/.bashrc ~/.bashrc.bak
 ln -s $PWD/bashrc ~/.bashrc
