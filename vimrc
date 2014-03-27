@@ -14,8 +14,6 @@ let mapleader = ","
 
 " Search results highlighting
 noremap <C-n> :nohl<CR>
-vnoremap <C-n> :nohl<CR>
-inoremap <C-n> :nohl<CR>
 
 " Movement
 map <c-j> <c-w>j
@@ -103,3 +101,6 @@ nmap <Leader>v :NERDTreeToggle<CR>
 vmap <Leader>v :NERDTreeToggle<CR>
 imap <Leader>v :NERDTreeToggle<CR>
 
+set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+
+:let NERDTreeIgnore = ['\.pyc$']

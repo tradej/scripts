@@ -125,18 +125,29 @@ function x() {
 
 }
 
+
+
 # User specific aliases and functions
 alias ..='cd ..'
-alias fequery='repoquery --enablerepo=rawhide'
-alias fesrcquery='repoquery --enablerepo=rawhide --archlist=src'
+alias la='ls -lA'
+alias less='/usr/share/vim/vim*/macros/less.sh'
+alias lr='ls -R'
+alias p3pip='python3-pip'
+
+# Fedora
+alias query-rawhide='repoquery --enablerepo=rawhide'
+alias query-src-rawhide='repoquery --enablerepo=rawhide --archlist=src'
+alias spec='vim *.spec'
+
+# RH
+alias status='source ~/scripts/new-status-report.sh'
+
+# Git
+alias gamend='git commit -a --amend -m"`git log -1 --pretty=%B`"'
+alias gc='git checkout'
+alias gcl='fedpkg clog; git commit -m"`cat clog`"'
 alias gco='git commit -m'
 alias gdiff='git diff'
 alias ginit='git init && git add * && git commit -a -m "Initial commit"'
 alias gst='git status'
-alias la='ls -lA'
-alias lr='ls -R'
 alias qgit='qgit --all'
-alias spec='vim *.spec'
-alias status='source ~/scripts/new-status-report.sh'
-alias gc='git checkout'
-alias less='/usr/share/vim/vim*/macros/less.sh'
