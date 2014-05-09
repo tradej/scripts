@@ -1,6 +1,6 @@
 "let g:Powerline_symbols = 'fancy'
 
-call pathogen#infect()
+"call pathogen#infect()
 
 nmap ,cl /%changelog<LF>:r!date +'\%a \%b \%d \%Y'' Tomas Radej <tradej@redhat.com> - ' <LF>0i* <ESC>$
 
@@ -44,6 +44,7 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+map <Leader>q :qa<CR>
 
 " Color scheme
 " mkdir -p ~/.vim/colors && cd ~/.vim/colors
