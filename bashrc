@@ -5,6 +5,20 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
+. ~/scripts/vcs.sh
+
+function acl {
+
+    if [ $# -eq 0 ]; then
+        name=`basename $PWD`
+    else
+        name=$1
+    fi
+
+    pkgdb-cli acl "$name"
+}
+
+
 function mkd {
     mkdir $1
     cd $1
@@ -68,6 +82,20 @@ function build() {
 	$( exit $return_value )
 }
 
+# == Clone package ==
+function clone-package() {
+
+    if [ $# -eq 0 ]; then
+        echo clone-package: Clone a Fedora package and extract its contents
+        echo 'Usage: clone-package <filename> <arguments>'
+        return
+    fi
+
+    fedpkg clone $1
+    cd $1
+    fedpkg prep
+}
+
 # == Extract ==
 # Attempts to extract a file based on extension
 function x() {
@@ -125,14 +153,25 @@ function x() {
 
 }
 
+function gcd {
+    cd "$1"
+    git pull --ff-only
+}
 
 
 # User specific aliases and functions
 alias ..='cd ..'
+alias cls='printf "\033c"'
+alias setend='xmodmap -e "keycode 118 = End NoSymbol End"'
+alias setinsert='xmodmap -e "keycode 118 = Insert NoSymbol Insert"'
 alias la='ls -lA'
 alias less='/usr/share/vim/vim*/macros/less.sh'
 alias lr='ls -R'
+alias py='python'
+alias py3='python3'
 alias p3pip='python3-pip'
+alias search='grep -Hnis --include'
+alias rsearch='grep -RHnis --include'
 
 # Fedora
 alias query-rawhide='repoquery --enablerepo=rawhide'
@@ -140,6 +179,7 @@ alias query-src-rawhide='repoquery --enablerepo=rawhide --archlist=src'
 alias spec='vim *.spec'
 
 # RH
+alias clip-status='source ~/scripts/clip-status-report.sh'
 alias status='source ~/scripts/new-status-report.sh'
 
 # Git
@@ -148,7 +188,9 @@ alias gc='git checkout'
 alias gcl='fedpkg clog; git commit -m"`cat clog`"'
 alias gco='git commit -m'
 alias gdiff='git diff'
+alias gdifft='git difftool -d'
 alias ginit='git init && git add * && git commit -a -m "Initial commit"'
 alias gpff='git pull --ff-only'
+alias gpr='git pull --rebase'
 alias gst='git status'
 alias qgit='qgit --all'
