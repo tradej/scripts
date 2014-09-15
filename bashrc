@@ -170,13 +170,14 @@ alias lr='ls -R'
 alias py='python'
 alias py3='python3'
 alias p3pip='python3-pip'
-alias search='grep -Hnis --include'
-alias rsearch='grep -RHnis --include'
+alias search='grep -Hnis'
+alias rsearch='grep -RHnis'
 
 # Fedora
 alias query-rawhide='repoquery --enablerepo=rawhide'
 alias query-src-rawhide='repoquery --enablerepo=rawhide --archlist=src'
 alias spec='vim *.spec'
+alias prep='fedpkg prep'
 
 # RH
 alias clip-status='source ~/scripts/clip-status-report.sh'
