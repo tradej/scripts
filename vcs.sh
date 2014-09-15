@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function parse_git_dirty {
-    git status 2> /dev/null | tail -1 | grep -q 'working directory clean' || echo "*"
+    result=''
+    git ls-files --others --exclude-standard 2> /dev/null | grep -q . && result='+'
+    git diff --shortstat | grep -q . && result='*'
+    echo "$result"
 }
 function parse_git_branch {
     git rev-parse --abbrev-ref HEAD 2> /dev/null
