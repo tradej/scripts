@@ -110,11 +110,15 @@ alias setinsert='xmodmap -e "keycode 118 = Insert NoSymbol Insert"'
 alias la='ls -lA'
 alias less='/usr/share/vim/vim*/macros/less.sh'
 alias lr='ls -R'
+alias search='grep -Hnis'
+alias rsearch='grep -RHnis'
+alias x='dtrx'
+
+#Programming
 alias py='python'
 alias py3='python3'
 alias p3pip='python3-pip'
-alias search='grep -Hnis'
-alias rsearch='grep -RHnis'
+alias clean-python='rm -rf dist/ build/ *.egg-info/'
 
 # Fedora
 alias query-rawhide='repoquery --enablerepo=rawhide'
