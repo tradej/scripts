@@ -83,7 +83,7 @@ function build() {
 }
 
 # == Clone package ==
-function clone-package() {
+function fclone() {
 
     if [ $# -eq 0 ]; then
         echo clone-package: Clone a Fedora package and extract its contents
