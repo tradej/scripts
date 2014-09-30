@@ -96,63 +96,6 @@ function fclone() {
     fedpkg prep
 }
 
-# == Extract ==
-# Attempts to extract a file based on extension
-function x() {
-
-    if [ $# -eq 0 ]; then
-        echo extract: Extract file based on extension
-        echo 'Usage: extract <filename> <arguments>'
-        return
-    fi
-
-    # Determining extract/list action
-    options='extract'
-    filename=''
-    for i in $*; do
-        if [ "$i" = '-l' ]; then options='list';
-        elif [ $( file $i &> /dev/null; echo $? ) -eq '0' ]; then filename=$i;
-        else echo Wrong option; return
-        fi
-    done
-
-    if [ "$filename" = '' ]; then
-        echo You must specify filename!
-        return
-    fi
-
-    extension=$( echo $filename | awk -F . '{print $NF}' )
-    args=''
-
-    if [ "$extension" = 'tar' -o "$extension" = 'gz' -o "$extension" = 'xz' -o "$extension" = 'tgz' ]; then
-        if [ "$options" = 'extract' ]; then args='-xa'
-        elif [ "$options" = 'list' ]; then args='-at'; fi;
-
-        tar -f $filename $args
-
-    elif [ "$extension" = 'jar' ]; then
-        if [ "$options" = 'extract' ]; then args='-xf'
-        elif [ "$options" = 'list' ]; then args='-tf'; fi;
-
-        jar $args $filename
-
-    elif [ "$extension" = 'zip' ]; then
-        if [ "$options" = 'extract' ]; then args=''
-        elif [ "$options" = 'list' ]; then args='-l'; fi
-
-        unzip $args $filename
-
-    elif [ "$extension" = 'rpm' ]; then
-        if [ "$options" = 'extract' ]; then
-            rpm2cpio "$filename" | cpio -idv
-        elif [ "$options" = 'list' ]; then
-            rpm -qlp $filename
-        fi
-
-    fi
-
-}
-
 function gcd {
     cd "$1"
     git pull --ff-only
