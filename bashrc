@@ -101,10 +101,24 @@ function gcd {
     git pull --ff-only
 }
 
+function pip-all-uninstall {
+    for ver in 2 2.7 3 3.4; do
+        pip${ver} uninstall $@
+    done
+}
+
+function wpconvert {
+    if [ $# -lt 1 ]; then
+        echo "You need to specify filename"
+    fi
+
+    rst2html "$1" | sed '1,/^<h1/d' | tr '\n' ' ' | sed 's/<\([\/]*\)tt[^>]*>/<\1code>/g' | sed 's|</div>.*$||'
+}
 
 # User specific aliases and functions
 alias ..='cd ..'
 alias cls='printf "\033c"'
+alias editrc='vim ~/.bashrc; . ~/.bashrc'
 alias setend='xmodmap -e "keycode 118 = End NoSymbol End"'
 alias setinsert='xmodmap -e "keycode 118 = Insert NoSymbol Insert"'
 alias la='ls -lA'
@@ -114,17 +128,25 @@ alias search='grep -Hnis'
 alias rsearch='grep -RHnis'
 alias x='dtrx'
 
-#Programming
+# Programming
+alias delswp='find -iname "*.swp" -delete'
 alias py='python'
 alias py3='python3'
 alias p3pip='python3-pip'
 alias clean-python='rm -rf dist/ build/ *.egg-info/'
+alias retval='echo $?'
+alias run-tests='./setup.py test && notify-send "Tests successful" || notify-send "Tests failed"'
+
+# DevAssistant
+alias dap-build='git clean-all; rm *.dap; delswp; da twk dap pack; da pkg lint *.dap'
+alias dap-reinstall='yes | da pkg uninstall $(basename $PWD | sed -e "s/dap-//"); da pkg install ./*.dap'
 
 # Fedora
 alias query-rawhide='repoquery --enablerepo=rawhide'
 alias query-src-rawhide='repoquery --enablerepo=rawhide --archlist=src'
 alias spec='vim *.spec'
 alias prep='fedpkg prep'
+alias get-sources='spectool -g *.spec'
 
 # RH
 alias clip-status='source ~/scripts/clip-status-report.sh'
