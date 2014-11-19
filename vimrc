@@ -1,5 +1,8 @@
 "let g:Powerline_symbols = 'fancy'
 
+au BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
+au BufRead,BufNewFile *.md set filetype=markdown
+
 "call pathogen#infect()
 
 nmap ,cl /%changelog<LF>:r!date +'\%a \%b \%d \%Y'' Tomas Radej <tradej@redhat.com> - ' <LF>0i* <ESC>$
