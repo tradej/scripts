@@ -11,8 +11,11 @@ for entry in $dirlist; do
     list="$(git log --author='Tomas Radej' --since="30 days ago" --pretty=format:'\n%s')"
     if [ "$list" != "" ]; then
         echo
+        tput setaf 4
         echo $entry
-        echo ====================
+        tput setaf 2
+        echo ===============================
+        tput sgr0
         echo -e $list
     fi
     popd &> /dev/null
