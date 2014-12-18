@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
 EXECDIR=~
+PERIOD=23
 
 dirlist=$(find $EXECDIR -type d -name .git -exec dirname '{}' ';')
 
@@ -8,7 +9,7 @@ dirs -c
 
 for entry in $dirlist; do
     pushd $entry &> /dev/null
-    list="$(git log --author='Tomas Radej' --since="30 days ago" --pretty=format:'\n%s')"
+    list="$(git log --all --author='Tomas Radej' --since="$PERIOD days ago" --pretty=format:'\n%s')"
     if [ "$list" != "" ]; then
         echo
         tput setaf 4
