@@ -7,6 +7,8 @@ fi
 
 . ~/scripts/vcs.sh
 
+export PATH=$PATH:~/.local/bin
+
 function acl {
 
     if [ $# -eq 0 ]; then
@@ -115,6 +117,14 @@ function wpconvert {
     rst2html "$1" | sed '1,/^<h1/d' | tr '\n' ' ' | sed 's/<\([\/]*\)tt[^>]*>/<\1code>/g' | sed 's|</div>.*$||'
 }
 
+function setmock {
+    alias mck="mock -r $1"
+}
+
+function dev {
+    cd ~/development/$1/$2/
+}
+
 # User specific aliases and functions
 alias ..='cd ..'
 alias cls='printf "\033c"'
@@ -142,11 +152,13 @@ alias dap-build='git clean-all; rm *.dap; delswp; da twk dap pack; da pkg lint *
 alias dap-reinstall='yes | da pkg uninstall $(basename $PWD | sed -e "s/dap-//"); da pkg install ./*.dap'
 
 # Fedora
+alias get-sources='spectool -g *.spec'
+alias pipun='yes | pip uninstall'
+alias prep='fedpkg prep'
 alias query-rawhide='repoquery --enablerepo=rawhide'
 alias query-src-rawhide='repoquery --enablerepo=rawhide --archlist=src'
 alias spec='vim *.spec'
-alias prep='fedpkg prep'
-alias get-sources='spectool -g *.spec'
+alias srpm='dnf repoquery -q --qf "%{SOURCERPM}"'
 
 # RH
 alias clip-status='source ~/scripts/clip-status-report.sh'
@@ -164,3 +176,5 @@ alias gpff='git pull --ff-only'
 alias gpr='git pull --rebase'
 alias gst='git status'
 alias qgit='qgit --all 2> /dev/null'
+
+export RPM_PACKAGER='Tomas Radej <tradej@redhat.com>'
