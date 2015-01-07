@@ -43,5 +43,12 @@ function vcs_branches {
     fi
 }
 
-export PS1='[\u@\h \[\033[1;34m\]\W\[\033[0m\]\[\033[1;32m\]$(vcs_branches)\[\033[0m\]]$ '
+function promptretval {
+    value=$?
+    if [ $value -ne 0 ]; then
+        echo "$value "
+    fi
+}
+
+export PS1='[\u@\h \[\033[1;31m\]$(promptretval)\[\033[0m\]\[\033[1;34m\]\W\[\033[0m\]\[\033[1;32m\]$(vcs_branches)\[\033[0m\]]$ '
 
