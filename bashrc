@@ -135,6 +135,7 @@ alias la='ls -lA'
 alias less='/usr/share/vim/vim*/macros/less.sh'
 alias lr='ls -R'
 alias search='grep -Hnis'
+alias disk-sleep='sudo hdparm -Y /dev/sd{a,b}'
 alias rsearch='grep -RHnis'
 alias x='dtrx'
 
