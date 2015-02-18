@@ -25,7 +25,9 @@ function parse_git_branch {
     git rev-parse --abbrev-ref HEAD 2> /dev/null
 }
 function parse_hg_branch {
-    hg branch 2> /dev/null
+    if $(which hg 2> /dev/null); then
+        hg branch 2> /dev/null
+    fi
 }
 
 function vcs_branches {

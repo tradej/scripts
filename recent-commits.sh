@@ -13,7 +13,7 @@ for dir in $(find ~ -name .git); do
 
     if [ "$log" != "" ]; then
         name=$(basename $PWD)
-        echo $name
+        echo "$name ($PWD)"
         echo $name | sed -e 's/./=/g'
         echo -e $log
         echo
